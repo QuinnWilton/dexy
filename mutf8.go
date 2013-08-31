@@ -48,7 +48,7 @@ func DecodeMutf8Rune(p []byte) (r rune, n int) {
 	return RuneError, 3
 }
 
-func Mutf8(p []byte) (s string, e error) {
+func Mutf8(p []byte) (s string, err error) {
 	var buffer bytes.Buffer
 	for i := range p {
 		if p[i] == 0x0 {
@@ -57,11 +57,11 @@ func Mutf8(p []byte) (s string, e error) {
 		}
 		r, _ := DecodeMutf8Rune(p[i:])
 		if r == RuneError {
-			e = errors.New("Mutf8: String contains invalid code point")
+			err = errors.New("Mutf8: String contains invalid code point")
 			return
 		}
 		buffer.WriteRune(r)
 	}
-	e = errors.New("Mutf8: Byte array must not be empty")
+	err = errors.New("Mutf8: Byte array must not be empty")
 	return
 }
